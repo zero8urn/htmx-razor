@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TailwindInputFile>$(MSBuildProjectDirectory)\Styles\app.css</TailwindInputFile>
+  </PropertyGroup>
+
+  <!-- Install npm packages during build -->
+  <Target Name="NpmInstall" BeforeTargets="BuildTailwind">
+    <Exec Command="npm install" />
+  </Target>
+
+  <!-- Build Tailwind CSS -->
+  <Target Name="BuildTailwind" BeforeTargets="Build">
+    <Exec Command="npm run tailwind:build" />
+    <Message Importance="high" Text="Tailwind CSS built successfully" />
+  </Target>
+</Project>

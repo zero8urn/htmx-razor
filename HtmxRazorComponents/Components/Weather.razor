@@ -1,0 +1,19 @@
+﻿@using HtmxRazorComponents.Models
+
+<div class="space-y-4">
+    @foreach (var forecast in Forecasts)
+    {
+        <div class="bg-white shadow rounded-lg p-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-semibold">@forecast.Date.ToShortDateString()</h3>
+                <span class="text-lg">@forecast.TemperatureC°C</span>
+            </div>
+            <p class="text-green-600">@forecast.Summary</p>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<WeatherForecast> Forecasts { get; set; } = [];
+}
