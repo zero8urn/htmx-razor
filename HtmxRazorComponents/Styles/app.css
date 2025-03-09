@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
 @config "../tailwind.config.js";
+
+@theme {
+    --font-sans: InterVariable, sans-serif;
+}

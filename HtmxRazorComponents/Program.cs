@@ -3,7 +3,6 @@ using HtmxRazorComponents.Models;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 // Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
@@ -54,7 +53,26 @@ app.MapRazorPages();
 app.MapRazorComponents<HtmxRazorComponents.App>();
 
 
-app.MapGet("/weather", (IHtmlHelper htmlHelper, [FromServices] HtmlRenderer htmlRenderer) =>
+app.MapGet("/weather", () =>
+{
+    var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+    {
+        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        TemperatureC = Random.Shared.Next(-20, 55),
+        Summary = WeatherForecast.GetWeatherSummary(Random.Shared.Next(0, 4))
+    });
+
+    WeatherViewModel weatherViewModel = new()
+    {
+        Forecasts = forecasts
+    };
+
+    // This works from within aspnet core.
+    // If you needed to render a component into html from a console app, you would need to use the HtmlRenderer class.
+    return new RazorComponentResult<Weather>(weatherViewModel);
+});
+
+app.MapGet("/clicked", ([FromServices] HtmlRenderer htmlRenderer) =>
 {
     var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
     {
